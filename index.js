@@ -1,12 +1,14 @@
 import os from 'os'
+import path from 'path'
 import {stdout, stdin, exit} from 'process'
 import * as readline from 'readline'
 
 import { greeting } from "./src/greeting.js"
+import { calcHash } from './src/calcHash.js'
 
 const userName = process.argv[2].split('=')[1]
-const currentDirectory = os.userInfo().homedir
-const currentDirectoryString = `You are currently in ${currentDirectory}\n`
+let currentDirectory = os.userInfo().homedir
+let currentDirectoryString = `You are currently in ${currentDirectory}\n`
 
 greeting(userName)
 stdout.write(currentDirectoryString)
@@ -19,15 +21,19 @@ rl.on('line', dataBuffer => {
     switch (data) {
       case '.exit':
         exit()
+      case data.match(/hash\s.+/)?.input:
+        const pathToHashFile = path.join(currentDirectory, data.split(' ')[1])
+        calcHash(pathToHashFile)
+        break
       default:
         console.log('\x1b[31m%s\x1b[0m', 'Invalid input')
-        break;
+        break
     }
   } catch(err) {
-    console.log('\x1b[31m%s\x1b[0m', 'Operation failed')
+    console.log('\x1b[31m%s\x1b[0m', 'Operation failed', '\n', err.message)
+  } finally {
+    setTimeout(() => stdout.write('\n' + currentDirectoryString), 0)
   }
-
-  stdout.write('\n' + currentDirectoryString)
 })
 
 process.on('exit', () => stdout.write(`\nThank you for using File Manager, ${userName}!`))

@@ -6,10 +6,11 @@ import * as readline from 'readline'
 import { greeting } from './src/greeting.js'
 import { calcHash } from './src/calcHash.js'
 import { osInput } from './src/osInput.js'
+import { changeDirectory } from './src/changeDirectory.js'
+import { up } from './src/up.js'
 
 const userName = process.argv[2].split('=')[1]
-let currentDirectory = os.userInfo().homedir
-let currentDirectoryString = `You are currently in ${currentDirectory}\n`
+let [currentDirectory, currentDirectoryString] = changeDirectory(os.userInfo().homedir)
 
 greeting(userName)
 stdout.write(currentDirectoryString)
@@ -28,6 +29,12 @@ rl.on('line', dataBuffer => {
         break
       case data.match(/os\s--.+/)?.input:
         osInput(data)
+        break
+      case 'up':
+        const newDirectories = up(currentDirectory, currentDirectoryString)
+            
+        currentDirectory = newDirectories[0] 
+        currentDirectoryString = newDirectories[1]
         break
       default:
         console.log('\x1b[31m%s\x1b[0m', 'Invalid input')

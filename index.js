@@ -33,7 +33,7 @@ rl.on('line', async dataBuffer => {
       case '.exit':
         exit()
       case data.match(/hash\s.+/)?.input:
-        const pathToHashFile = path.join(currentDirectory, data.split(' ')[1])
+        const pathToHashFile = path.join(currentDirectory, data.split(/ +/)[1])
         await calcHash(pathToHashFile)
         break
       case data.match(/os\s--.+/)?.input:
@@ -67,14 +67,19 @@ rl.on('line', async dataBuffer => {
         rm(pathToRemoveFile)
         break
       case data.match(/rn\s.+\s.+/)?.input:
-          const pathToOldFileName = path.join(currentDirectory, data.slice(3).split(' ')[0])
-          const pathToNewFileName = path.join(currentDirectory, data.slice(3).split(' ')[1])
+          const pathToOldFileName = path.join(currentDirectory, data.slice(3).split(/ +/)[0])
+          const pathToNewFileName = path.join(currentDirectory, data.slice(3).split(/ +/)[1])
           rn(pathToNewFileName, pathToOldFileName)
         break
       case data.match(/cp\s.+\s.+/)?.input:
-          const pathToCopyFile = path.join(currentDirectory, data.slice(3).split(' ')[0])
-          const pathToCopyDestinationFolder = path.join(currentDirectory, data.slice(3).split(' ').splice(1).join(' '), data.slice(3).split(' ')[0])
+          const pathToCopyFile = path.join(currentDirectory, data.slice(3).split(/ +/)[0])
+          const pathToCopyDestinationFolder = path.join(currentDirectory, data.slice(3).split(/ +/).splice(1).join(' '), data.slice(3).split(/ +/)[0])
           cp(pathToCopyFile, pathToCopyDestinationFolder)
+        break
+      case data.match(/mv\s.+\s.+/)?.input:
+          const pathToMoveFile = path.join(currentDirectory, data.slice(3).split(/ +/)[0])
+          const pathToMoveDestinationFolder = path.join(currentDirectory, data.slice(3).split(/ +/).splice(1).join(' '), data.slice(3).split(/ +/)[0])
+          cp(pathToMoveFile, pathToMoveDestinationFolder)
         break
       default:
         console.log('\x1b[31m%s\x1b[0m', 'Invalid input')

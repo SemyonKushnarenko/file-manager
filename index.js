@@ -10,6 +10,7 @@ import { changeDirectory } from './src/changeDirectory.js'
 import { up } from './src/up.js'
 import { cd } from './src/cd.js'
 import { ls } from './src/ls.js'
+import { cat } from './src/cat.js'
 
 const userName = process.argv[2].split('=')[1]
 let newDirectories = changeDirectory(os.userInfo().homedir)
@@ -48,6 +49,10 @@ rl.on('line', async dataBuffer => {
       case 'ls':
         const files = await ls(currentDirectory)
         files.forEach(file => console.log(file))
+        break
+      case data.match(/cat\s.+/)?.input:
+        const pathToCatFile = path.join(currentDirectory, data.slice(4))
+        cat(pathToCatFile)
         break
       default:
         console.log('\x1b[31m%s\x1b[0m', 'Invalid input')

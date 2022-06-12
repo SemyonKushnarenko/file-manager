@@ -13,6 +13,7 @@ import { ls } from './src/ls.js'
 import { cat } from './src/cat.js'
 import { add } from './src/add.js'
 import { rn } from './src/rn.js'
+import { rm } from './src/rm.js'
 
 const userName = process.argv[2].split('=')[1]
 let newDirectories = changeDirectory(os.userInfo().homedir)
@@ -59,6 +60,10 @@ rl.on('line', async dataBuffer => {
       case data.match(/add\s.+/)?.input:
         const pathToAddFile = path.join(currentDirectory, data.slice(4))
         add(pathToAddFile)
+        break
+      case data.match(/rm\s.+/)?.input:
+        const pathToRemoveFile = path.join(currentDirectory, data.slice(3))
+        rm(pathToRemoveFile)
         break
       case data.match(/rn\s.+\s.+/)?.input:
           const pathToOldFileName = path.join(currentDirectory, data.slice(3).split(' ')[0])

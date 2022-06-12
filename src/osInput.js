@@ -3,7 +3,12 @@ import os from 'os'
 export const osInput = data => {
   switch (data.split(' ')[1].slice(2)) {
     case "cpus":
-      console.log(os.cpus())
+      const cpus = os.cpus()
+      const cpusInfo = cpus.map(cpu => {return {
+        model: cpu.model,
+        speed: cpu.speed
+      }})
+      console.log(cpusInfo)
       break
     case "homedir":
       console.log(os.userInfo().homedir)

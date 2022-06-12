@@ -39,7 +39,7 @@ rl.on('line', async dataBuffer => {
         break
       case data.match(/cd\s.+/)?.input:
         const pathToNewDirectory = path.join(currentDirectory, data.slice(3))
-        newDirectories = await cd(pathToNewDirectory, currentDirectory, currentDirectoryString)
+        newDirectories = cd(pathToNewDirectory, currentDirectory, currentDirectoryString)
         currentDirectory = newDirectories[0] 
         currentDirectoryString = newDirectories[1]
         break

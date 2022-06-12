@@ -14,6 +14,7 @@ import { cat } from './src/cat.js'
 import { add } from './src/add.js'
 import { rn } from './src/rn.js'
 import { rm } from './src/rm.js'
+import { cp } from './src/cp.js'
 
 const userName = process.argv[2].split('=')[1]
 let newDirectories = changeDirectory(os.userInfo().homedir)
@@ -69,6 +70,11 @@ rl.on('line', async dataBuffer => {
           const pathToOldFileName = path.join(currentDirectory, data.slice(3).split(' ')[0])
           const pathToNewFileName = path.join(currentDirectory, data.slice(3).split(' ')[1])
           rn(pathToNewFileName, pathToOldFileName)
+        break
+      case data.match(/cp\s.+\s.+/)?.input:
+          const pathToCopyFile = path.join(currentDirectory, data.slice(3).split(' ')[0])
+          const pathToCopyDestinationFolder = path.join(currentDirectory, data.slice(3).split(' ').splice(1).join(' '), data.slice(3).split(' ')[0])
+          cp(pathToCopyFile, pathToCopyDestinationFolder)
         break
       default:
         console.log('\x1b[31m%s\x1b[0m', 'Invalid input')

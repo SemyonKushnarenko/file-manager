@@ -9,6 +9,7 @@ import { osInput } from './src/osInput.js'
 import { changeDirectory } from './src/changeDirectory.js'
 import { up } from './src/up.js'
 import { cd } from './src/cd.js'
+import { ls } from './src/ls.js'
 
 const userName = process.argv[2].split('=')[1]
 let newDirectories = changeDirectory(os.userInfo().homedir)
@@ -22,6 +23,7 @@ const rl = readline.createInterface({input: stdin, output: process.stdout});
 rl.on('line', async dataBuffer => {
   const data = dataBuffer.toString().trim()
   try {
+    console.log('')
     switch (data) {
       case '.exit':
         exit()
@@ -42,6 +44,10 @@ rl.on('line', async dataBuffer => {
         newDirectories = cd(pathToNewDirectory, currentDirectory, currentDirectoryString)
         currentDirectory = newDirectories[0] 
         currentDirectoryString = newDirectories[1]
+        break
+      case 'ls':
+        const files = await ls(currentDirectory)
+        files.forEach(file => console.log(file))
         break
       default:
         console.log('\x1b[31m%s\x1b[0m', 'Invalid input')
